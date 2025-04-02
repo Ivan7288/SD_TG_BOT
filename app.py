@@ -7,7 +7,6 @@ import uuid
 app = Flask(__name__)
 sd_service = StableDiffusionService()
 
-# Ensure uploads directory exists
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -25,14 +24,11 @@ def generate():
         if not prompt:
             return jsonify({'success': False, 'error': 'No prompt provided'})
 
-        # Generate unique filename
         filename = f"{uuid.uuid4()}.png"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
 
-        # Generate image
         sd_service.generate_image(prompt, filepath)
 
-        # Save to database
         session = Session()
         image = GeneratedImage(
             prompt=prompt,
